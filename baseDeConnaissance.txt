@@ -1,0 +1,28 @@
+faits_booleens = avoir_fait_prison , habite_chateau , intelligent , fort , riche , grand , lourd , malhonnete , parents_riches , pauvre , travailleur , chercheur , thesard , leger;
+faits_symboliques=profession;
+faits_entiers = fortune_enfant, fortune , fortune_parents, poids , taille , travail_par_jour , combien; 
+
+chercheur; 
+non thesard; 
+profession = medecin; 
+poids = (-46 + 95);
+fortune_parents = (1000/10 * (25 + 80) / 3 + 50 * (12 - 5) + 14000 / 2) - 1000; 
+
+si malhonnete et fort alors riche; 
+si parents_riches et intelligent alors riche;
+si travailleur et intelligent alors riche;
+si fortune > 10000 alors riche;
+si profession = medecin alors riche;
+si profession = informaticien alors riche;
+si profession = fonctionnaire alors pauvre; 
+si non habite_chateau alors pauvre;
+si riche alors non pauvre; 
+si pauvre alors non riche;
+si avoir_fait_prison alors malhonnete; 
+si grand et lourd alors fort; 
+si taille > 185 alors grand; 
+si poids > 95 alors lourd; 
+si poids < 50 alors leger; 
+si poids < 50 alors fortune = (2 * fortune_parents) - 1; 
+si fortune_parents > 10000 alors parents_riches; 
+si travail_par_jour > 8 alors travailleur;

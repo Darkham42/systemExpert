@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+<project name="SysExp" default="run" basedir=".">
+<property name="app.name" value="SysExp"/>
+<property name="app.version" value="0.1"/>
+<property name="app.fullname" value="${app.name}-${app.version}"/>
+<property name="build.home" value="${basedir}/build"/>
+<property name="dist.home" value="${basedir}/dist"/>
+<property name="docs.home" value="${basedir}/docs"/>
+<property name="src.home" value="${basedir}/src"/>
+<property name="test.home" value="${basedir}/test"/>
+<property name="javac.version" value="1.7"/>
+<property name="javac.encoding" value="UTF-8"/>
+<!--
+ ==================== Compile options =========================== 
+-->
+<property name="compile.debug" value="true"/>
+<property name="compile.deprecation" value="false"/>
+<property name="compile.optimize" value="true"/>
+<!--
+ ==================== Compilation Classpath =========================== 
+-->
+<path id="compile.classpath">
+</path>
+<!--
+ ==================== All Target ====================================== 
+-->
+<target name="all" depends="clean,compile" description="Clean build and dist directories, then compile"/>
+<!--
+ ==================== Clean Target ==================================== 
+-->
+<target name="clean" description="Delete old build and dist directories">
+<delete dir="${build.home}"/>
+<delete dir="${dist.home}"/>
+</target>
+<!--
+ ==================== Compile Target ================================== 
+-->
+<target name="compile" depends="prepare" description="Compile Java sources">
+<javac srcdir="${src.home}" destdir="${build.home}" debug="${compile.debug}" deprecation="${compile.deprecation}" optimize="${compile.optimize}" source="${javac.version}" encoding="${javac.encoding}">
+<classpath refid="compile.classpath"/>
+</javac>
+<!--  Copy application resources  -->
+<copy todir="${build.home}">
+<fileset dir="${src.home}" excludes="**/*.java"/>
+</copy>
+</target>
+<!--
+ ==================== Prepare Target ================================== 
+-->
+<target name="prepare">
+<mkdir dir="${build.home}"/>
+<mkdir dir="${dist.home}"/>
+</target>
+<!--
+ ==================== Dist Target ===================================== 
+-->
+<target name="dist" depends="clean,compile,javadoc" description="Create binary distribution">
+<!--  Create application JAR file  -->
+<jar jarfile="${dist.home}/${app.fullname}.jar" basedir="${build.home}">
+<manifest>
+<attribute name="Main-Class" value="sysexp.client.SysExp"/>
+</manifest>
+</jar>
+</target>
+<!--
+ ==================== Javadoc Target ================================== 
+-->
+<target name="javadoc" depends="compile" description="Create Javadoc API documentation">
+<mkdir dir="${dist.home}/docs/api"/>
+<javadoc sourcepath="${src.home}" destdir="${dist.home}/docs/api" packagenames="*">
+</javadoc>
+</target>
+<!--
+ ==================== Run Target ================================== 
+-->
+<target name="run" depends="dist">
+<java jar="${dist.home}/${app.fullname}.jar" fork="true">
+<arg value="${file}"/>
+</java>
+</target>
+<!--
+ ==================== Run English ================================== 
+-->
+<target name="run-english" depends="dist">
+<java jar="${dist.home}/${app.fullname}.jar" fork="true">
+<jvmarg value="-Duser.language=en"/>
+</java>
+</target>
+</project>
